@@ -1,7 +1,9 @@
 
 <script setup lang="ts">
 import type { PokemonLong, PokemonShort } from '@/services';
+import { computed } from 'vue';
 import { ref, type PropType } from 'vue';
+import AppToggle from './AppToggle.vue';
 
 
 export interface Pokemon extends PokemonShort, PokemonLong {};
@@ -13,10 +15,18 @@ const props = defineProps({
 /** Image View Handler */
 
 const viewBack = ref(false);
+const isShiny = ref(false);
 
 function switchView() {
   viewBack.value = !viewBack.value;
 }
+
+const imageView = computed(()=>{
+  let viewType: 'back' | 'front' = viewBack.value ? 'back' : 'front';
+  let pokeType: 'shiny' | 'default' = isShiny.value ? 'shiny' : 'default';
+  
+  return props.pokemon?.sprites?.[`${viewType}_${pokeType}`]
+})
 
 </script>
 
@@ -41,17 +51,25 @@ function switchView() {
     <!-- Pokemon Image -->
     <div
     class="
-        aspect-square object-cover
-        rounded border border-secondary-500 
-        bg-primary-200
+      relative
+      aspect-square object-cover
+      rounded border border-secondary-500 
+      bg-primary-200
       "
     >
       <img 
-        :src="props.pokemon?.sprites?.[viewBack ? 'back_default' : 'front_default']" 
+        :src="imageView" 
         :alt="props.pokemon?.name || 'Pokemon'"
         class="w-full h-full hover:scale-105 transition-transform drop-shadow hover:drop-shadow-lg cursor-pointer"
         @click="switchView"
       />
+
+      <AppToggle 
+        v-model="isShiny" 
+        class="absolute bottom-1 left-2"
+        label="Shiny"
+      >
+      </AppToggle>
     </div>
     <!-- Description -->
     <div 
