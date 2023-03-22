@@ -111,7 +111,7 @@ interface Pokemon extends PokemonShort, PokemonLong {}
         <!-- Poke Card -->
         <PokeCard 
           v-for="(pokemon, index) in pokemons" 
-          :key="index"
+          :key="`${pokemon.id}-${index}` "
           :pokemon="pokemon"
           class=""
         ></PokeCard>
