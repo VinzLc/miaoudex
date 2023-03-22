@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Pokemon Font */
+  @font-face {
+    font-family: 'Pokemon';
+    src: url('./pokemon/PokemonSolid.ttf') format('truetype')
+  }
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(252, 211, 77, 0.8);
+    border-radius: 100vh;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(252 211 77 );
+  }
+}

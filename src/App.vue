@@ -1,0 +1,142 @@
+<script setup lang="ts">
+import { pokemon, type PokemonShort, type PokemonLong, type PokemonGetListParams } from '@/services';
+import { ref, watch } from 'vue';
+import PokeCard from '@/components/PokeCard.vue';
+import AppButton from '@/components/AppButton.vue';
+import AppPagination from '@/components/AppPagination.vue'
+import {default as NavigationToggle, type ModelValue as NavModelVal} from './components/NavigationToggle.vue';
+import axios from 'axios';
+
+/** POKEMON FETCHING  */
+
+const pokemons = ref<Pokemon[]>([]);
+const pokemonLoading = ref(false)
+
+
+/**
+ * Fetch lists of pokemons
+ * @param params Parameter to pass on pokemon API
+ * @param type increment: add value to the list / paginate: replace value by new items
+ */
+async function fetchPokemonList(params: PokemonGetListParams, type = 'increment') {
+  pokemonLoading.value = true;
+  let _newPokemons = (await pokemon.getList(params)).data
+  let _pokemons = pokemons.value;
+  if (type === 'increment' && params.offset !== 0) {
+    _pokemons = [
+      ..._pokemons,
+      ..._newPokemons.results,
+    ]
+  } else {
+    _pokemons = _newPokemons.results;
+  }
+
+  if (_pokemons.length > 150) {
+    _pokemons.splice(150 - _pokemons.length)
+  }
+
+  pokemons.value = _pokemons
+
+  for (let i = 0; i < pokemons.value.length; i++) {
+    fetchPokemonDescription(i);
+  }
+  pokemonLoading.value = false;
+}
+
+/**
+ * Fetch details of thee pokemon
+ */
+async function fetchPokemonDescription(index: number) {
+  const _pokemon = pokemons.value[index];
+  
+  if (!_pokemon.url) return;
+
+  let pokemonDetails = (await axios.get(_pokemon.url)).data;
+  pokemons.value[index] = {
+    ..._pokemon,
+    ...pokemonDetails,
+  };
+}
+
+/** NAVIGATION */
+
+const navType = ref<NavModelVal>('increment');
+const page = ref(1);
+
+// Return to first page when changing navigation types
+watch(navType, ()=>{ page.value = 1 })
+
+// Refetch when page variable changes
+watch(page, ()=>{
+  const isIncrement = navType.value === 'increment';
+  const isFirstPage = page.value === 1;
+  const limit = isIncrement ? (isFirstPage ? 50 : 15) : 30;
+  const offset1 = isIncrement ? 50 : 30;
+  const offset2 = limit * (page.value - 2);
+  const offset = isFirstPage ? 0 : offset1 + offset2; 
+  fetchPokemonList({ offset, limit }, navType.value) 
+}, { immediate: true });
+
+
+/** TYPE DEFINITIONS */
+
+interface Pokemon extends PokemonShort, PokemonLong {}
+
+</script>
+
+<template>
+  <div class="overflow-hidden min-h-screen h-screen w-full bg-secondary-600">
+    <div class="scrollbar h-full overflow-auto p-3 px-6">
+      
+      <div class="flex flex-col sm:flex-row gap-6 md:gap-1 justify-between items-center">
+        <!-- Title -->
+        <h1 class="mb-5 text-5xl text-primary-500 font-pokemon underline">
+          POKEDEX
+        </h1>
+        
+        <!-- Navigation -->
+        <NavigationToggle v-model="navType"></NavigationToggle>
+      </div>
+      
+
+      <!-- List -->
+      <div 
+        class="
+          mt-5 
+          w-full 
+          gap-4
+          grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5
+        "
+      >
+        <!-- Poke Card -->
+        <PokeCard 
+          v-for="(pokemon, index) in pokemons" 
+          :key="index"
+          :pokemon="pokemon"
+          class=""
+        ></PokeCard>
+      </div>
+
+      <!-- Pagination -->
+      <h3 v-if="pokemonLoading" class="text-primary-500 text-center">
+          Loading...
+      </h3>
+        
+      <div v-else class="flex justify-center">
+        <AppPagination 
+          v-if="navType === 'pagination'"
+          v-model="page"
+          :pages="5" 
+        ></AppPagination>
+
+        <AppButton
+          v-else-if="navType === 'increment' && pokemons.length < 150" 
+          @click="() => page += 1"
+        >
+          Load More
+        </AppButton>
+
+      </div> 
+    </div>
+  </div>
+</template>
