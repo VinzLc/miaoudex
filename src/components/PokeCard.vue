@@ -1,7 +1,8 @@
 
 <script setup lang="ts">
 import type { PokemonLong, PokemonShort } from '@/services';
-import type { PropType } from 'vue';
+import { computed } from '@vue/reactivity';
+import { ref, type PropType } from 'vue';
 
 
 export interface Pokemon extends PokemonShort, PokemonLong {};
@@ -9,6 +10,14 @@ export interface Pokemon extends PokemonShort, PokemonLong {};
 const props = defineProps({
   pokemon: { type: Object as PropType<Pokemon> }
 })
+
+/** Image View Handler */
+
+const viewBack = ref(false);
+
+function switchView() {
+  viewBack.value = !viewBack.value;
+}
 
 </script>
 
@@ -39,9 +48,10 @@ const props = defineProps({
       "
     >
       <img 
-        :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.pokemon?.id}.png`" 
+        :src="props.pokemon?.sprites?.[viewBack ? 'back_default' : 'front_default']" 
         :alt="props.pokemon?.name || 'Pokemon'"
-        class="w-full h-full hover:scale-105 transition-transform drop-shadow hover:drop-shadow-lg"
+        class="w-full h-full hover:scale-105 transition-transform drop-shadow hover:drop-shadow-lg cursor-pointer"
+        @click="switchView"
       />
     </div>
     <!-- Description -->
