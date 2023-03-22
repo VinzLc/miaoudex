@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
 import type { PokemonLong, PokemonShort } from '@/services';
-import { computed } from '@vue/reactivity';
 import { ref, type PropType } from 'vue';
 
 
