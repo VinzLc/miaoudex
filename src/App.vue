@@ -25,10 +25,10 @@ async function fetchPokemonList(params: PokemonGetListParams, type = 'increment'
   if (type === 'increment' && params.offset !== 0) {
     _pokemons = [
       ..._pokemons,
-      ..._newPokemons.results,
+      ..._newPokemons.results as Pokemon[],
     ]
   } else {
-    _pokemons = _newPokemons.results;
+    _pokemons = _newPokemons.results as Pokemon[];
   }
 
   if (_pokemons.length > 150) {
