@@ -143,7 +143,7 @@ watch(page, ()=>{
       v-model:power-pokedex="showPokedex"
       v-model:pokemon-id="activePokeId"
     ></PokedexView>
-
+    <!-- Intro -->
     <div 
       class="
         z-50
@@ -158,7 +158,7 @@ watch(page, ()=>{
 
           <h1 
             class="text-4xl font-pokemon text-primary-400 translate-y-1">
-            Simple Pokedex
+            Sample Pokedex
           </h1>
           <p class="mt-4 text-end font-pixel opacity-0 animate-slideDown text-white">
             By Lian Robin Castillo
