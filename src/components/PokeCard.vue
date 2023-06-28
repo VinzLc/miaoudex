@@ -12,6 +12,8 @@ const props = defineProps({
   pokemon: { type: Object as PropType<Pokemon> }
 })
 
+const emits = defineEmits(['viewPokedex'])
+
 /** Image View Handler */
 
 const viewBack = ref(false);
@@ -70,6 +72,23 @@ const imageView = computed(()=>{
         label="Shiny"
       >
       </AppToggle>
+
+      <button
+        class="
+          px-4
+          pt-1
+          absolute bottom-1 right-2
+          text-xs text-white font-pixel
+          rounded-full 
+          bg-accent-500 hover:bg-accent-400
+          shadow
+          opacity-0 group-hover:opacity-100
+          transition-all
+        "
+        @click="emits('viewPokedex')"
+      >
+        View in Pokedex
+      </button>
     </div>
     <!-- Description -->
     <div 

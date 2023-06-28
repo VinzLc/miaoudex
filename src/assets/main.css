@@ -8,6 +8,11 @@
     font-family: 'Pokemon';
     src: url('/src/assets/fonts/pokemon/PokemonSolid.ttf') format('truetype')
   }
+
+  @font-face {
+    font-family: 'Pixel';
+    src: url('/src/assets/fonts/PixelGameFont.ttf') format('truetype')
+  }
 }
 
 @layer utilities {

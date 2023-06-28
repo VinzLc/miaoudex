@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { pokemon, type PokemonShort, type PokemonLong, type PokemonGetListParams } from '@/services';
+import { pokemon,  type Pokemon, type PokemonGetListParams } from '@/services';
 import { ref, watch } from 'vue';
 import PokeCard from '@/components/PokeCard.vue';
 import AppButton from '@/components/AppButton.vue';
 import AppPagination from '@/components/AppPagination.vue'
 import {default as NavigationToggle, type ModelValue as NavModelVal} from './components/NavigationToggle.vue';
 import axios from 'axios';
+import PokedexView from './components/PokedexView.vue';
 
 /** POKEMON FETCHING  */
 
 const pokemons = ref<Pokemon[]>([]);
 const pokemonLoading = ref(false)
-
+const activePokeId = ref<number>(1);
+const showPokedex = ref(true);
 
 /**
  * Fetch lists of pokemons
@@ -76,22 +78,18 @@ watch(page, ()=>{
   const offset = isFirstPage ? 0 : offset1 + offset2; 
   fetchPokemonList({ offset, limit }, navType.value) 
 }, { immediate: true });
-
-
-/** TYPE DEFINITIONS */
-
-interface Pokemon extends PokemonShort, PokemonLong {}
-
 </script>
 
 <template>
   <div class="overflow-hidden min-h-screen h-screen w-full bg-secondary-600">
+    <!-- Pokedec Card Viewer -->
     <div class="scrollbar h-full overflow-auto p-3 px-6">
       
       <div class="flex flex-col sm:flex-row gap-6 md:gap-1 justify-between items-center">
         <!-- Title -->
-        <h1 class="mb-5 text-5xl text-primary-500 font-pokemon underline">
-          POKEDEX
+        <h1 class="mb-5 text-5xl text-primary-500">
+          <span class="font-pokemon underline">POKEDEX</span>
+          <span class="ml-2 text-lg">Card View</span> 
         </h1>
         
         <!-- Navigation -->
@@ -113,7 +111,7 @@ interface Pokemon extends PokemonShort, PokemonLong {}
           v-for="(pokemon, index) in pokemons" 
           :key="`${pokemon.id}-${index}` "
           :pokemon="pokemon"
-          class=""
+          @viewPokedex="showPokedex = true, activePokeId = pokemon.id || 1"
         ></PokeCard>
       </div>
 
@@ -136,7 +134,36 @@ interface Pokemon extends PokemonShort, PokemonLong {}
           Load More
         </AppButton>
 
-      </div> 
+      </div>
+      
+      
     </div>
+    <!-- Pokedex Viewer -->
+    <PokedexView
+      v-model:power-pokedex="showPokedex"
+      v-model:pokemon-id="activePokeId"
+    ></PokedexView>
+
+    <div 
+      class="
+        z-50
+        fixed top-0 left-0 
+        bg-secondary-900 
+        h-full w-full 
+        flex items-center justify-center
+        animate-blurIn
+      "
+      >
+        <div class="p-4 pb-6 bg-accent-600 border-2 border-primary-500">
+
+          <h1 
+            class="text-4xl font-pokemon text-primary-400 translate-y-1">
+            Simple Pokedex
+          </h1>
+          <p class="mt-4 text-end font-pixel opacity-0 animate-slideDown text-white">
+            By Lian Robin Castillo
+          </p>
+        </div>
+      </div>
   </div>
 </template>
