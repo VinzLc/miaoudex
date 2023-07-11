@@ -13,7 +13,7 @@ import PokedexView from './components/PokedexView.vue';
 const pokemons = ref<Pokemon[]>([]);
 const pokemonLoading = ref(false)
 const activePokeId = ref<number>(1);
-const showPokedex = ref(true);
+const showPokedex = ref(false);
 
 /**
  * Fetch lists of pokemons
