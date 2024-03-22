@@ -27,7 +27,7 @@ const imageView = computed(()=>{
 
 const imagePath = computed(()=>{
   if (props.index != undefined)
-  return props.index > 2 ? '\\maioumons\\unknown.png' :  '\\maioumons\\'+ props.index + '.png' 
+  return props.index > 4 ? '\\maioumons\\unknown.png' :  '\\maioumons\\'+ props.index + '.png' 
 })
 </script>
 

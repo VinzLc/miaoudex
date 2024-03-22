@@ -102,7 +102,8 @@ watch(page, ()=>{
           mt-5 
           w-full 
           gap-16
-          grid grid-cols-3
+          grid grid-cols-1
+          lg: grid-cols-4
         "
       >
         <!-- Poke Card -->
