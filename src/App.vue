@@ -4,7 +4,7 @@ import { ref, watch } from 'vue';
 import PokeCard from '@/components/PokeCard.vue';
 import AppButton from '@/components/AppButton.vue';
 import AppPagination from '@/components/AppPagination.vue'
-import {default as NavigationToggle, type ModelValue as NavModelVal} from './components/NavigationToggle.vue';
+import type {ModelValue as NavModelVal} from './components/NavigationToggle.vue';
 import axios from 'axios';
 import PokedexView from './components/PokedexView.vue';
 

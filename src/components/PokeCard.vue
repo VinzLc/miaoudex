@@ -26,11 +26,8 @@ const imageView = computed(()=>{
 })
 
 const imagePath = computed(()=>{
-  return '\\maioumons\\'+ props.index + '.png' 
-})
-
-const unknownPath = computed(()=>{
-  return '\\maioumons\\unknown.png' 
+  if (props.index != undefined)
+  return props.index > 2 ? '\\maioumons\\unknown.png' :  '\\maioumons\\'+ props.index + '.png' 
 })
 </script>
 
@@ -50,7 +47,6 @@ const unknownPath = computed(()=>{
     >
       <img 
         :src=imagePath
-        @error="$event.target.src=unknownPath"
         class=" w-full h-full hover:scale-105 transition-transform drop-shadow hover:drop-shadow-lg cursor-pointer"
       />
     </div>
