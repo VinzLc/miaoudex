@@ -88,12 +88,11 @@ watch(page, ()=>{
       <div class="flex flex-col sm:flex-row gap-6 md:gap-1 justify-between items-center">
         <!-- Title -->
         <h1 class="mb-5 text-5xl text-primary-500">
-          <span class="font-pokemon underline">POKEDEX</span>
-          <span class="ml-2 text-lg">Card View</span> 
+          <span class="font-pokemon underline">MIAOU DEX</span>
         </h1>
         
         <!-- Navigation -->
-        <NavigationToggle v-model="navType"></NavigationToggle>
+
       </div>
       
 
@@ -102,14 +101,15 @@ watch(page, ()=>{
         class="
           mt-5 
           w-full 
-          gap-4
-          grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5
+          gap-16
+          grid grid-cols-3
         "
       >
         <!-- Poke Card -->
         <PokeCard 
           v-for="(pokemon, index) in pokemons" 
           :key="`${pokemon.id}-${index}` "
+          :index="index+1"
           :pokemon="pokemon"
           @viewPokedex="showPokedex = true, activePokeId = pokemon.id || 1"
         ></PokeCard>
@@ -158,11 +158,9 @@ watch(page, ()=>{
 
           <h1 
             class="text-4xl font-pokemon text-primary-400 translate-y-1">
-            Sample Pokedex
+            MIAOU DEX
           </h1>
-          <p class="mt-4 text-end font-pixel opacity-0 animate-slideDown text-white">
-            By Lian Robin Castillo
-          </p>
+    
         </div>
       </div>
   </div>
